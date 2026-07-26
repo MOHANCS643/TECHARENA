@@ -1,0 +1,121 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<!-- Font Awesome -->
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+<div class="admin-login-container">
+
+    <div class="admin-login-card">
+
+        <div class="admin-icon">
+            <i class="fa-solid fa-user-shield"></i>
+        </div>
+
+        <div class="admin-logo">
+            <h1>TECH ARENA</h1>
+            <p>🔒 Secure Admin Control Panel</p>
+        </div>
+
+        {% if error %}
+        <div class="admin-error">
+            <i class="fa-solid fa-circle-exclamation"></i>
+            {{ error }}
+        </div>
+        {% endif %}
+
+        <form action="/admin/login" method="POST">
+
+            <div class="input-group">
+
+                <label>
+                    <i class="fa-solid fa-user"></i>
+                    Username
+                </label>
+
+                <input
+                    type="text"
+                    name="username"
+                    placeholder="Enter Admin Username"
+                    required
+                >
+
+            </div>
+
+            <div class="input-group">
+
+                <label>
+                    <i class="fa-solid fa-lock"></i>
+                    Password
+                </label>
+
+                <div class="password-box">
+
+                    <input
+                        type="password"
+                        id="password"
+                        name="password"
+                        placeholder="Enter Password"
+                        required
+                    >
+
+                    <i
+                        class="fa-solid fa-eye"
+                        id="togglePassword"
+                    ></i>
+
+                </div>
+
+            </div>
+
+            <button type="submit" class="login-btn">
+
+                <i class="fa-solid fa-right-to-bracket"></i>
+
+                Login
+
+            </button>
+
+        </form>
+
+    </div>
+
+</div>
+
+<script>
+
+const togglePassword =
+document.getElementById("togglePassword");
+
+const password =
+document.getElementById("password");
+
+togglePassword.onclick = function(){
+
+    if(password.type==="password"){
+
+        password.type="text";
+
+        togglePassword.classList.remove("fa-eye");
+
+        togglePassword.classList.add("fa-eye-slash");
+
+    }
+
+    else{
+
+        password.type="password";
+
+        togglePassword.classList.remove("fa-eye-slash");
+
+        togglePassword.classList.add("fa-eye");
+
+    }
+
+}
+
+</script>
+
+{% endblock %}

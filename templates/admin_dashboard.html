@@ -1,0 +1,479 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="admin-dashboard">
+
+    <!-- Header -->
+    <div class="admin-header">
+        <div>
+            <h1>TECH ARENA</h1>
+            <p>Competition Control Panel</p>
+        </div>
+
+        <div class="admin-status">
+            <span class="status-live">🟢 QUIZ LIVE</span>
+           <div class="timer-box">
+
+    <small>Time Remaining</small>
+
+    <h2 id="countdownTimer">
+        20:00
+    </h2>
+
+</div>
+        </div>
+    </div>
+
+
+    <!-- Statistics -->
+    <div class="stats-grid">
+
+        <div class="stats-card">
+            <div class="stats-icon">👥</div>
+            <h2 id="totalTeams">{{ teams|length }}</h2>
+            <p>Total Teams</p>
+        </div>
+
+        <div class="stats-card">
+            <div class="stats-icon">📝</div>
+            <h2 id="submittedTeams">
+    {{ teams | selectattr("is_quiz_completed") | list | length }}
+</h2>
+            <p>Quiz Submitted</p>
+        </div>
+
+        <div class="stats-card">
+            <div class="stats-icon">⏳</div>
+            <h2 id="runningTeams">
+    {{ teams|length - (teams | selectattr("is_quiz_completed") | list | length) }}
+</h2>
+            <p>Quiz Running</p>
+        </div>
+
+        <div class="stats-card">
+            <div class="stats-icon">🏆</div>
+            <h2 id="highestScore">
+                {% if teams %}
+                    {{ teams[0].score }}
+                {% else %}
+                    0
+                {% endif %}
+            </h2>
+            <p>Highest Score</p>
+        </div>
+
+        <div class="stats-card">
+    <div class="stats-icon">🟢</div>
+    <h2 id="onlineTeams">0</h2>
+    <p>Online Teams</p>
+</div>
+
+    </div>
+
+
+    <!-- Leaderboard -->
+
+    <!-- Online Teams -->
+
+<div class="leaderboard-card">
+
+    <div class="leaderboard-title">
+        🟢 Live Online Teams
+    </div>
+
+    <table class="leaderboard-table">
+
+        <thead>
+
+            <tr>
+
+                <th>Team Name</th>
+
+                <th>College</th>
+
+                <th>Status</th>
+
+            </tr>
+
+        </thead>
+
+        <tbody id="onlineTeamsBody">
+
+            <tr>
+
+                <td colspan="3">
+
+                    No Teams Online
+
+                </td>
+
+            </tr>
+
+        </tbody>
+
+    </table>
+
+</div>
+    <div class="leaderboard-card">
+
+        <div class="leaderboard-title">
+            🏆 Live Leaderboard
+        </div>
+
+        <table class="leaderboard-table">
+
+            <thead>
+                <tr>
+                    <th>Rank</th>
+                    <th>Team Name</th>
+                    <th>College</th>
+                    <th>Score</th>
+                    <th>Percentage</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+
+            <tbody id="leaderboardBody">
+
+            {% if teams %}
+
+                {% for team in teams %}
+
+                <tr>
+
+                    <td>{{ loop.index }}</td>
+
+                    <td>{{ team.team_name }}</td>
+
+                    <td>{{ team.college_name }}</td>
+
+                    <td>{{ team.score }}</td>
+
+                    <td>{{ team.percentage }}%</td>
+
+                    <td>
+                        {% if team.is_quiz_completed %}
+                            ✅ Submitted
+                        {% else %}
+                            ⏳ Running
+                        {% endif %}
+                    </td>
+
+                </tr>
+
+                {% endfor %}
+
+            {% else %}
+
+                <tr>
+                    <td colspan="6">
+                        Waiting for Quiz Submissions...
+                    </td>
+                </tr>
+
+            {% endif %}
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+
+    <!-- Footer -->
+    <div class="admin-controls">
+
+    <button id="startQuiz" class="control-btn start-btn">
+        ▶ Start Quiz
+    </button>
+
+    <button id="pauseQuiz" class="control-btn pause-btn">
+        ⏸ Pause Quiz
+    </button>
+
+    <button id="endQuiz" class="control-btn end-btn">
+        ■ End Quiz
+    </button>
+
+    <button id="resetQuiz" class="control-btn reset-btn">
+        🔄 Reset Quiz
+    </button>
+
+</div>
+
+<div class="admin-footer">
+
+    <a href="/admin/logout" class="btn">
+
+        Logout
+
+    </a>
+
+</div>
+
+</div>
+
+<script>
+
+// ---------------- Countdown ----------------
+
+function updateCountdown(){
+
+    fetch("/admin/countdown")
+
+    .then(r=>r.json())
+
+    .then(data=>{
+
+        let sec = data.remaining;
+
+        let min = Math.floor(sec/60);
+
+        sec = sec % 60;
+
+        document.getElementById("countdownTimer").innerHTML =
+            String(min).padStart(2,"0") + ":" +
+            String(sec).padStart(2,"0");
+
+    });
+
+}
+
+setInterval(updateCountdown,1000);
+
+updateCountdown();
+
+
+// ---------------- Start Quiz ----------------
+
+document
+.getElementById("startQuiz")
+.addEventListener("click", function(){
+
+    fetch("/admin/start_quiz",{
+
+        method:"POST"
+
+    })
+
+    .then(r=>r.json())
+
+    .then(data=>{
+
+        if(data.success){
+
+            alert("Quiz Started Successfully");
+
+        }
+
+    });
+
+});
+
+
+// ---------------- Pause Quiz ----------------
+
+document
+.getElementById("pauseQuiz")
+.addEventListener("click", function(){
+
+    fetch("/admin/pause_quiz",{
+
+        method:"POST"
+
+    })
+
+    .then(r=>r.json())
+
+    .then(data=>{
+
+        if(data.success){
+
+            alert("Quiz Paused / Resumed");
+
+        }
+
+    });
+
+});
+
+
+// ---------------- End Quiz ----------------
+
+document
+.getElementById("endQuiz")
+.addEventListener("click", function(){
+
+    fetch("/admin/end_quiz",{
+
+        method:"POST"
+
+    })
+
+    .then(r=>r.json())
+
+    .then(data=>{
+
+        if(data.success){
+
+            alert("Quiz Ended");
+
+        }
+
+    });
+
+});
+
+
+// ---------------- Reset Quiz ----------------
+
+document
+.getElementById("resetQuiz")
+.addEventListener("click", function(){
+
+    fetch("/admin/reset_quiz",{
+
+        method:"POST"
+
+    })
+
+    .then(r=>r.json())
+
+    .then(data=>{
+
+        if(data.success){
+
+            alert("Quiz Reset");
+
+            location.reload();
+
+        }
+
+    });
+
+});
+
+// ===============================
+// LIVE DASHBOARD UPDATE
+// ===============================
+
+function loadDashboard(){
+
+    fetch("/admin/stats")
+
+    .then(response => response.json())
+
+    .then(data => {
+
+        document.getElementById("totalTeams").innerHTML =
+            data.total_teams;
+
+        document.getElementById("submittedTeams").innerHTML =
+            data.submitted;
+
+        document.getElementById("runningTeams").innerHTML =
+            data.running;
+
+        document.getElementById("highestScore").innerHTML =
+            data.highest;
+        
+        document.getElementById("onlineTeams").innerHTML =
+            data.online;
+
+
+        // ---------------- Online Teams ----------------
+
+let onlineBody = document.getElementById("onlineTeamsBody");
+
+onlineBody.innerHTML = "";
+
+if(data.online_teams.length === 0){
+
+    onlineBody.innerHTML = `
+        <tr>
+            <td colspan="3">
+                No Teams Online
+            </td>
+        </tr>
+    `;
+
+}else{
+
+    data.online_teams.forEach(team=>{
+
+        onlineBody.innerHTML += `
+
+        <tr>
+
+            <td>${team.team_name}</td>
+
+            <td>${team.college}</td>
+
+            <td style="color:green;font-weight:bold;">
+                🟢 Online
+            </td>
+
+        </tr>
+
+        `;
+
+    });
+
+}    
+        let body = document.getElementById("leaderboardBody");
+
+        body.innerHTML = "";
+
+        if(data.leaderboard.length === 0){
+
+            body.innerHTML = `
+                <tr>
+                    <td colspan="6">
+                        Waiting for Quiz Submissions...
+                    </td>
+                </tr>
+            `;
+
+            return;
+        }
+
+        data.leaderboard.forEach(team => {
+
+            let medal = team.rank;
+
+            if(team.rank === 1) medal = "🥇";
+            if(team.rank === 2) medal = "🥈";
+            if(team.rank === 3) medal = "🥉";
+
+            body.innerHTML += `
+                <tr>
+
+                    <td>${medal}</td>
+
+                    <td>${team.team_name}</td>
+
+                    <td>${team.college}</td>
+
+                    <td>${team.score}</td>
+
+                    <td>${team.percentage}%</td>
+
+                    <td>✅ Submitted</td>
+
+                </tr>
+            `;
+
+        });
+
+    });
+
+}
+
+setInterval(loadDashboard,2000);
+
+loadDashboard();
+
+</script>
+
+{% endblock %}

@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+
+{% block title %}Tech Arena | Home{% endblock %}
+
+{% block content %}
+
+<section class="hero">
+
+    <div class="hero-content">
+
+        <h1>Welcome to Tech Arena</h1>
+
+        <p>
+            National Level Technical Symposium
+        </p>
+
+        <p>
+            Participate in exciting Quiz and Coding Challenges.
+        </p>
+
+        <div class="buttons">
+
+            <a href="{{ url_for('auth.register') }}" class="btn">
+                Register Team
+            </a>
+
+            <a href="{{ url_for('auth.login') }}" class="btn">
+                Team Login
+            </a>
+
+            <a href="/admin/login" class="btn">
+                Admin Login
+            </a>
+
+        </div>
+
+    </div>
+
+</section>
+
+<section class="features">
+
+    <div class="card">
+
+        <h2>Round 1</h2>
+
+        <p>
+            Online Technical Quiz
+        </p>
+
+    </div>
+
+    <div class="card">
+
+        <h2>Round 2</h2>
+
+        <p>
+            Offline Technical Event
+        </p>
+
+    </div>
+
+    <div class="card">
+
+        <h2>Round 3</h2>
+
+        <p>
+            Coding Challenge
+        </p>
+
+    </div>
+
+</section>
+
+{% endblock %}

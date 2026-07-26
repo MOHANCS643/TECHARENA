@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="dashboard">
+
+    <div class="dashboard-card instructions-card">
+
+        <h2>Round 1 - Technical Quiz</h2>
+
+        <hr>
+
+        {% if message %}
+
+            <br>
+
+            <h3 style="text-align:center;color:#2563eb;">
+                {{ message }}
+            </h3>
+
+            <br><br>
+
+            <center>
+
+                <a href="/instructions" class="btn">
+                    Refresh
+                </a>
+
+            </center>
+
+        {% else %}
+
+            <h3>Instructions</h3>
+
+            <br>
+
+            <ul class="instructions-list">
+
+                <li>Total Questions : <strong>25</strong></li>
+
+                <li>Total Time : <strong>20 Minutes</strong></li>
+
+                <li>Each Question carries <strong>1 Mark</strong></li>
+
+                <li>No Negative Marks</li>
+
+                <li>Each question has only one correct answer.</li>
+
+                <li>Do not refresh the browser.</li>
+
+                <li>Do not close the browser.</li>
+
+                <li>Click Submit before time ends.</li>
+
+                <li>Once submitted, quiz cannot be attempted again.</li>
+
+            </ul>
+
+            <br><br>
+
+            <center>
+
+                   <a href="/quiz/start" class="btn">Start Quiz</a>
+                
+            </center>
+
+        {% endif %}
+
+    </div>
+
+</div>
+
+{% endblock %}

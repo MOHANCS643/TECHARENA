@@ -1,0 +1,88 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block content %}
+
+<div class="dashboard">
+
+    <h1>Welcome, {{ team.team_name }}</h1>
+
+    <div class="dashboard-card">
+
+        <h2>Team Details</h2>
+
+        <hr>
+
+        <p><strong>Team ID :</strong> {{ team.team_id }}</p>
+
+        <p><strong>Team Name :</strong> {{ team.team_name }}</p>
+
+        <p><strong>College :</strong> {{ team.college_name }}</p>
+
+        <p><strong>Leader :</strong> {{ team.leader_name }}</p>
+
+        <p><strong>Email :</strong> {{ team.email }}</p>
+
+        <p><strong>Phone :</strong> {{ team.phone }}</p>
+
+    </div>
+
+    <div class="dashboard-card">
+
+        <h2>Round 1 - Quiz</h2>
+
+        <hr>
+
+        {% if team.is_quiz_completed %}
+
+            <p style="color:limegreen;">
+                ✅ Quiz Completed
+            </p>
+
+        {% else %}
+
+            <p style="color:orange;">
+                Quiz Not Attempted
+            </p>
+
+            <a href="/instructions" class="btn">
+                Start Quiz
+            </a>
+        {% endif %}
+
+    </div>
+
+    <div class="dashboard-card">
+
+        <h2>Round 3 - Coding</h2>
+
+        <hr>
+
+        {% if team.is_coding_completed %}
+
+            <p style="color:limegreen;">
+                ✅ Coding Completed
+            </p>
+
+        {% else %}
+
+            <p style="color:orange;">
+                Locked
+            </p>
+
+        {% endif %}
+
+    </div>
+
+    <br>
+
+    <a href="{{ url_for('auth.logout') }}" class="btn">
+
+        Logout
+
+    </a>
+
+</div>
+
+{% endblock %}

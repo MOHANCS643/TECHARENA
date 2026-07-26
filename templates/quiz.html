@@ -1,0 +1,409 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="quiz-container">
+
+    <!-- Top Bar -->
+
+    <div class="quiz-header">
+
+        <div>
+
+            <h2>Round 1 - Technical Quiz</h2>
+            <p>Question <span id="currentQuestion">1</span> of <span id="totalQuestions">25</span></p>
+
+        </div>
+
+        <div class="timer-box">
+
+            ⏳ Time Left
+
+            <h3 id="timer">20:00</h3>
+
+        </div>
+
+    </div>
+
+
+    <!-- Question -->
+
+    <div class="question-card">
+
+        <h3 id="questionText">
+
+            Loading Question...
+
+        </h3>
+
+
+        <div class="options">
+
+            <label class="option">
+
+                <input type="radio" name="answer" value="0">
+
+                <span id="optionA"></span>
+
+            </label>
+
+
+            <label class="option">
+
+               <input type="radio" name="answer" value="1">
+                <span id="optionB"></span>
+
+            </label>
+
+
+            <label class="option">
+
+                <input type="radio" name="answer" value="2">
+                <span id="optionC"></span>
+
+            </label>
+
+
+            <label class="option">
+
+                <input type="radio" name="answer" value="3">
+
+                <span id="optionD"></span>
+
+            </label>
+
+        </div>
+
+    </div>
+
+
+    <!-- Buttons -->
+
+    <div class="quiz-buttons">
+
+        <button class="btn" id="prevBtn">
+
+            ← Previous
+
+        </button>
+
+        <button class="btn" id="nextBtn">
+
+            Next →
+
+        </button>
+
+    </div>
+
+
+
+    <!-- Question Palette -->
+
+    <div class="palette-card">
+
+        <h3>Question Palette</h3>
+
+        <div class="palette-grid">
+
+            {% for i in range(1,26) %}
+
+            <button class="palette-btn">
+
+                {{ i }}
+
+            </button>
+
+            {% endfor %}
+
+        </div>
+
+    </div>
+
+
+
+    <!-- Submit -->
+
+    <div style="text-align:center;margin-top:40px;">
+
+    <button
+        class="btn"
+        onclick="confirmSubmit()">
+
+        Submit Quiz
+
+    </button>
+
+</div>
+
+</div>
+
+<script>
+
+let questions = [];
+let currentQuestion = 0;
+let answers = {};
+let visited = {};
+let timeLeft = 20 * 60; // 20 minutes
+let timerInterval;
+
+// --------------------
+// Load Questions
+// --------------------
+
+async function loadQuestions(){
+
+    const response = await fetch("/quiz/questions");
+
+    questions = await response.json();
+
+    document.getElementById("totalQuestions").innerText = questions.length;
+
+    showQuestion();
+    startTimer();
+
+}
+
+function startTimer(){
+
+    timerInterval = setInterval(function(){
+
+        let minutes = Math.floor(timeLeft / 60);
+        let seconds = timeLeft % 60;
+
+        document.getElementById("timer").innerText =
+            String(minutes).padStart(2,'0') + ":" +
+            String(seconds).padStart(2,'0');
+
+        if(timeLeft <= 0){
+
+            clearInterval(timerInterval);
+
+            alert("Time Over! Quiz will be submitted.");
+
+            submitQuiz();
+
+        }
+
+        timeLeft--;
+
+    },1000);
+
+}
+// --------------------
+// Show Current Question
+// --------------------
+
+function showQuestion(){
+
+    visited[currentQuestion] = true;
+
+    let q = questions[currentQuestion];
+
+    document.getElementById("currentQuestion").innerText = currentQuestion + 1;
+
+    document.getElementById("questionText").innerText = q.question;
+
+    document.getElementById("optionA").innerText = q.options[0];
+    document.getElementById("optionB").innerText = q.options[1];
+    document.getElementById("optionC").innerText = q.options[2];
+    document.getElementById("optionD").innerText = q.options[3];
+
+    let radios = document.getElementsByName("answer");
+
+    radios.forEach(r => r.checked = false);
+
+    if(answers[currentQuestion] != undefined){
+
+        radios[answers[currentQuestion]].checked = true;
+
+    }
+
+    updatePalette();
+
+}
+
+// --------------------
+// Save Answer
+// --------------------
+
+function saveAnswer(){
+
+    let radios = document.getElementsByName("answer");
+
+    delete answers[currentQuestion];
+
+    radios.forEach((radio,index)=>{
+
+        if(radio.checked){
+
+            answers[currentQuestion] = index;
+
+        }
+
+    });
+
+}
+
+// --------------------
+// Next Button
+// --------------------
+
+document.getElementById("nextBtn").onclick=function(){
+
+    saveAnswer();
+
+    if(currentQuestion < questions.length-1){
+
+        currentQuestion++;
+
+        showQuestion();
+
+    }
+
+}
+
+// --------------------
+// Previous Button
+// --------------------
+
+document.getElementById("prevBtn").onclick=function(){
+
+    saveAnswer();
+
+    if(currentQuestion > 0){
+
+        currentQuestion--;
+
+        showQuestion();
+
+    }
+
+}
+
+// --------------------
+// Palette Color Update
+// --------------------
+
+function updatePalette(){
+
+    let buttons = document.querySelectorAll(".palette-btn");
+
+    buttons.forEach((btn,index)=>{
+
+        btn.classList.remove(
+            "current-question",
+            "answered-question",
+            "visited-question"
+        );
+
+        if(index == currentQuestion){
+
+            btn.classList.add("current-question");
+
+        }
+        else if(answers[index] != undefined){
+
+            btn.classList.add("answered-question");
+
+        }
+        else if(visited[index]){
+
+            btn.classList.add("visited-question");
+
+        }
+
+    });
+
+}
+// --------------------
+// Palette Click
+// --------------------
+
+document.querySelectorAll(".palette-btn").forEach((btn,index)=>{
+
+    btn.onclick=function(){
+
+        saveAnswer();
+
+        currentQuestion=index;
+
+        showQuestion();
+
+    }
+
+});
+
+// --------------------
+// Start
+// --------------------
+
+async function submitQuiz() {
+
+    saveAnswer();
+
+    const response = await fetch("/quiz/submit", {
+
+        method: "POST",
+
+        headers: {
+            "Content-Type": "application/json"
+        },
+
+        body: JSON.stringify(answers)
+
+    });
+
+    const result = await response.json();
+
+    // Handle already submitted
+    if (!response.ok) {
+
+        alert(result.error);
+
+        return;
+
+    }
+
+    let percentage = ((result.score / result.total) * 100).toFixed(2);
+
+    window.location.href =
+        "/quiz/result?score=" + result.score +
+        "&total=" + result.total +
+        "&percentage=" + percentage;
+
+}
+
+
+function confirmSubmit(){
+
+    saveAnswer();
+
+    let answered = Object.keys(answers).length;
+
+    let unanswered = questions.length - answered;
+
+    let confirmBox = confirm(
+
+        "Submit Quiz?\n\n" +
+
+        "Answered Questions : " + answered +
+
+        "\nUnanswered Questions : " + unanswered +
+
+        "\n\nOnce submitted you cannot change your answers."
+
+    );
+
+    if(confirmBox){
+
+        submitQuiz();
+
+    }
+
+}
+
+loadQuestions();
+
+</script>
+
+{% endblock %}

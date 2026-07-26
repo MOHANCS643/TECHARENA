@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="dashboard">
+
+    <div class="dashboard-card" style="text-align:center;">
+
+        <h1>🎉 Quiz Completed</h1>
+
+        <br>
+
+        <h2>Your Score</h2>
+
+        <h1 style="font-size:70px;color:#2563eb;">
+
+            {{ score }}/{{ total }}
+
+        </h1>
+
+        <br>
+
+        <h3>Percentage</h3>
+
+<h2>{{ percentage }}%</h2>
+
+        <a href="/" class="btn">
+
+            Go Home
+
+        </a>
+
+    </div>
+
+</div>
+
+{% endblock %}

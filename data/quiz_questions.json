@@ -1,0 +1,67 @@
+[
+    {
+        "id": 1,
+        "category": "Computer Fundamentals",
+        "difficulty": "Easy",
+        "question": "What does CPU stand for?",
+        "options": [
+            "Central Processing Unit",
+            "Computer Processing Unit",
+            "Central Program Unit",
+            "Control Processing Unit"
+        ],
+        "answer": "Central Processing Unit"
+    },
+    {
+        "id": 2,
+        "category": "Networking",
+        "difficulty": "Easy",
+        "question": "Which protocol is used to browse websites?",
+        "options": [
+            "FTP",
+            "HTTP",
+            "SMTP",
+            "SSH"
+        ],
+        "answer": "HTTP"
+    },
+    {
+        "id": 3,
+        "category": "Cyber Security",
+        "difficulty": "Easy",
+        "question": "What is phishing?",
+        "options": [
+            "A cyber attack using fake emails",
+            "A type of firewall",
+            "An antivirus software",
+            "A network cable"
+        ],
+        "answer": "A cyber attack using fake emails"
+    },
+    {
+        "id": 4,
+        "category": "Programming",
+        "difficulty": "Easy",
+        "question": "Which language is primarily used for web page styling?",
+        "options": [
+            "Python",
+            "HTML",
+            "CSS",
+            "Java"
+        ],
+        "answer": "CSS"
+    },
+    {
+        "id": 5,
+        "category": "Database",
+        "difficulty": "Easy",
+        "question": "Which SQL command retrieves data?",
+        "options": [
+            "INSERT",
+            "DELETE",
+            "SELECT",
+            "UPDATE"
+        ],
+        "answer": "SELECT"
+    }
+]
