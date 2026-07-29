@@ -4,6 +4,7 @@ from models.team import Team
 from extensions import db
 import random
 import string
+from datetime import datetime
 
 auth = Blueprint("auth", __name__)
 
@@ -72,7 +73,9 @@ def login():
 
             login_user(team)
 
-            team.is_online = True
+            team.is_online = True 
+
+            team.login_time = datetime.now()
 
             db.session.commit()
 
@@ -106,6 +109,7 @@ def dashboard():
 def logout():
 
     current_user.is_online = False
+    current_user.login_time = None
 
     db.session.commit()
 

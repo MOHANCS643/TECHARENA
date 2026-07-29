@@ -28,9 +28,15 @@ def login_post():
 
     if username == ADMIN_USERNAME and password == ADMIN_PASSWORD:
 
-        session["admin"] = True
+       session["admin"] = True
 
-        return redirect("/admin/dashboard")
+    # Reset all teams to offline
+       Team.query.update({
+           Team.is_online: False
+        })
+    db.session.commit()
+
+    return redirect("/admin/dashboard")
 
     return render_template(
         "admin_login.html",
@@ -81,12 +87,10 @@ def stats():
     for team in Team.query.filter_by(is_online=True).all():
 
        online_teams.append({
-
-          "team_name": team.team_name,
-
-          "college": team.college_name
-
-    })
+    "team_name": team.team_name,
+    "college": team.college_name,
+    "login_time": team.login_time.strftime("%I:%M %p") if team.login_time else "-"
+})
 
     running = total_teams - submitted
 
@@ -121,10 +125,11 @@ def stats():
 
     for team in Team.query.filter_by(is_online=True).all():
 
-       online_teams.append({
-           "team_name": team.team_name,
-           "college": team.college_name
-    })
+     online_teams.append({
+    "team_name": team.team_name,
+    "college": team.college_name,
+    "login_time": team.login_time.strftime("%I:%M %p") if team.login_time else "-"
+})
 
     return jsonify({
 
@@ -228,12 +233,13 @@ def reset_quiz():
 
     Team.query.update({
 
-        Team.score:0,
-        Team.percentage:0,
-        Team.is_quiz_completed:False,
-        Team.submitted_at:None
+    Team.score: 0,
+    Team.percentage: 0,
+    Team.is_quiz_completed: False,
+    Team.submitted_at: None,
+    Team.is_online: False
 
-    })
+})
 
     db.session.commit()
 

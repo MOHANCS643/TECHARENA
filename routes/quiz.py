@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, jsonify, request
+from flask import Blueprint, render_template, jsonify, request, session, redirect, url_for
 from flask_login import login_required, current_user
 from extensions import db
 from models.quiz_control import QuizControl
@@ -17,6 +17,9 @@ quiz = Blueprint(
 @quiz.route("/")
 @login_required
 def quiz_home():
+
+    if session.get("quiz_started"):
+       return redirect(url_for("quiz.start_quiz_page"))
 
     control = QuizControl.query.first()
 
@@ -53,6 +56,9 @@ def quiz_home():
 @login_required
 def start_quiz_page():
 
+    if session.get("quiz_started"):
+        return render_template("quiz.html")
+
     control = QuizControl.query.first()
 
     if not control:
@@ -67,8 +73,8 @@ def start_quiz_page():
             message="Quiz is not available right now."
         )
 
+    session["quiz_started"] = True
     return render_template("quiz.html")
-
 
 # API to send questions
 @quiz.route("/questions")
@@ -144,6 +150,7 @@ def submit_quiz():
     current_user.submitted_at = datetime.now(UTC)
 
     db.session.commit()
+    session.pop("quiz_started", None)
 
     return jsonify({
         "score": score,

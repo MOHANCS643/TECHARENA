@@ -405,12 +405,75 @@ function confirmSubmit(){
 loadQuestions();
 
 </script>
+
 <script>
-    // Disable browser back button
-    history.pushState(null, null, location.href);
+(function () {
+    function preventBack() {
+        window.history.pushState(null, "", window.location.href);
+    }
+
+    preventBack();
 
     window.addEventListener("popstate", function () {
-        history.pushState(null, null, location.href);
+        preventBack();
     });
+
+    // Keep reinforcing the history entry
+    setInterval(preventBack, 500);
+})();
 </script>
+<script>
+document.addEventListener("contextmenu", function(e){
+    e.preventDefault();
+});
+</script>
+<script>
+document.addEventListener("keydown", function(e){
+
+    // F12
+    if(e.key === "F12"){
+        e.preventDefault();
+    }
+
+    // Ctrl+Shift+I
+    if(e.ctrlKey && e.shiftKey && e.key.toLowerCase() === "i"){
+        e.preventDefault();
+    }
+
+    // Ctrl+Shift+J
+    if(e.ctrlKey && e.shiftKey && e.key.toLowerCase() === "j"){
+        e.preventDefault();
+    }
+
+    // Ctrl+U
+    if(e.ctrlKey && e.key.toLowerCase() === "u"){
+        e.preventDefault();
+    }
+
+    // Ctrl+C
+if(e.ctrlKey && e.key.toLowerCase()=="c"){
+    e.preventDefault();
+}
+
+// Ctrl+V
+if(e.ctrlKey && e.key.toLowerCase()=="v"){
+    e.preventDefault();
+}
+
+// Ctrl+A
+if(e.ctrlKey && e.key.toLowerCase()=="a"){
+    e.preventDefault();
+}
+
+// Ctrl+S
+if(e.ctrlKey && e.key.toLowerCase()=="s"){
+    e.preventDefault();
+}
+
+});
+</script>
+
+
+
+
 {% endblock %}

@@ -66,7 +66,7 @@
         <div class="stats-card">
     <div class="stats-icon">🟢</div>
     <h2 id="onlineTeams">0</h2>
-    <p>Online Teams</p>
+    <p>Teams Logged In</p>
 </div>
 
     </div>
@@ -88,10 +88,10 @@
 
             <tr>
 
+                <th>#</th>
                 <th>Team Name</th>
-
                 <th>College</th>
-
+                <th>Login Time</th>
                 <th>Status</th>
 
             </tr>
@@ -379,7 +379,7 @@ function loadDashboard(){
             data.highest;
         
         document.getElementById("onlineTeams").innerHTML =
-            data.online;
+    `${data.online} / 25`;
 
 
         // ---------------- Online Teams ----------------
@@ -391,34 +391,38 @@ onlineBody.innerHTML = "";
 if(data.online_teams.length === 0){
 
     onlineBody.innerHTML = `
-        <tr>
-            <td colspan="3">
-                No Teams Online
-            </td>
-        </tr>
-    `;
+    <tr>
+        <td colspan="5">
+            No Teams Online
+        </td>
+    </tr>
+`;
 
 }else{
 
-    data.online_teams.forEach(team=>{
+    data.online_teams.forEach((team, index) => {
 
-        onlineBody.innerHTML += `
+    onlineBody.innerHTML += `
 
-        <tr>
+    <tr>
 
-            <td>${team.team_name}</td>
+        <td>${index + 1}</td>
 
-            <td>${team.college}</td>
+        <td>${team.team_name}</td>
 
-            <td style="color:green;font-weight:bold;">
-                🟢 Online
-            </td>
+        <td>${team.college}</td>
 
-        </tr>
+        <td>${team.login_time}</td>
 
-        `;
+        <td style="color:green;font-weight:bold;">
+            🟢 Online
+        </td>
 
-    });
+    </tr>
+
+    `;
+
+});
 
 }    
         let body = document.getElementById("leaderboardBody");

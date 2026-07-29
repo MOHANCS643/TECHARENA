@@ -33,6 +33,8 @@ class Team(UserMixin, db.Model):
 
     is_online = db.Column(db.Boolean, default=False)
 
+    login_time = db.Column(db.DateTime)
+
     submitted_at = db.Column(db.DateTime)
 
     def set_password(self, password):
