@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+
+{% block title %}Round 2{% endblock %}
+
+{% block content %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/riddles.css') }}">
+
+<div class="riddles-container">
+
+    <div class="riddles-header">
+
+        <h1>🔐 Logic ah Lock Pannu!</h1>
+
+        <p id="question-number">Question 1 / 20</p>
+
+    </div>
+
+    <div class="riddles-progress">
+
+        <div id="progress-fill"></div>
+
+    </div>
+
+    <div id="question-card" class="riddles-question-card">
+
+        <h2 id="question-text"></h2>
+
+    </div>
+
+    <div class="riddles-timer">
+
+        <span id="timer">45</span>
+
+    </div>
+
+    <div id="clueBox" class="clue-box" style="display:none;">
+
+    💡 Clue:
+    <br><br>
+
+    <span id="clueText"></span>
+
+</div>
+
+    <p class="riddles-status">
+
+        Read carefully. Next question will appear automatically.
+
+    </p>
+
+</div>
+
+<script id="questions-data" type="application/json">
+{{ questions|tojson }}
+</script>
+
+<script src="{{ url_for('static', filename='js/riddles.js') }}"></script>
+
+<div id="finish-screen" style="display:none;">
+
+    <img src="{{ url_for('static', filename='images/celeb.gif') }}"
+         width="300">
+
+    <h1>🎉 Congratulations!</h1>
+
+    <h2>Round 2 Completed</h2>
+
+    <p>
+        Please submit your answer sheet to the coordinators.
+    </p>
+
+</div>
+
+{% endblock %}

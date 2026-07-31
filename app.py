@@ -9,6 +9,7 @@ from routes.quiz import quiz
 from routes.coding import coding
 from routes.admin import admin
 from routes.api import api
+from routes.riddles import riddles
 
 
 def create_app():
@@ -25,6 +26,7 @@ def create_app():
     app.register_blueprint(home)
     app.register_blueprint(auth)
     app.register_blueprint(quiz)
+    app.register_blueprint(riddles)
     app.register_blueprint(coding)
     app.register_blueprint(admin)
     app.register_blueprint(api)

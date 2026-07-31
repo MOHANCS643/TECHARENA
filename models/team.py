@@ -31,6 +31,8 @@ class Team(UserMixin, db.Model):
 
     is_coding_completed = db.Column(db.Boolean, default=False)
 
+    is_riddles_completed = db.Column(db.Boolean, default=False)
+
     is_online = db.Column(db.Boolean, default=False)
 
     login_time = db.Column(db.DateTime)

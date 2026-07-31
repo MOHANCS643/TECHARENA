@@ -30,7 +30,7 @@
 
     <div class="dashboard-card">
 
-        <h2>Round 1 - Quiz</h2>
+        <h2>Round 1 - Nail The Basics</h2>
 
         <hr>
 
@@ -47,15 +47,57 @@
             </p>
 
             <a href="/instructions" class="btn">
-                Start Quiz
+                Start
             </a>
         {% endif %}
 
     </div>
 
+  <div class="dashboard-card">
+
+    <h2>Round 2 - Logic ah Lock Pannu!</h2>
+
+    <hr>
+
+    <div id="round2Area">
+
+        {% if team.is_riddles_completed %}
+
+    <p style="color:limegreen;">
+        ✅ Round 2 Completed
+    </p>
+
+{% elif event and event.round2_enabled %}
+
+    <p style="color:limegreen;">
+        🟢 Round 2 Started
+    </p>
+
+    <a href="{{ url_for('riddles.instructions') }}" class="btn">
+        Start
+    </a>
+
+{% else %}
+
+    <p style="color:orange;">
+        🔒 Waiting for Coordinator...
+    </p>
+
+    <button class="btn"
+            disabled
+            style="opacity:.6;cursor:not-allowed;">
+        Locked
+    </button>
+
+{% endif %}
+
+    </div>
+
+</div>
+
     <div class="dashboard-card">
 
-        <h2>Round 3 - Coding</h2>
+        <h2>Round 3 - The Final Compile</h2>
 
         <hr>
 
@@ -84,5 +126,64 @@
     </a>
 
 </div>
+
+<script>
+
+function checkRound2(){
+
+    fetch("/round2_status")
+
+    .then(response => response.json())
+
+    .then(data => {
+
+        const round2Area = document.getElementById("round2Area");
+
+        // Already Completed
+        if(round2Area.innerHTML.includes("Completed")){
+            return;
+        }
+
+        if(data.enabled){
+
+            round2Area.innerHTML = `
+
+                <p style="color:limegreen;">
+                    🟢 Round 2 Started
+                </p>
+
+                <a href="/riddles/instructions" class="btn">
+                    Start
+                </a>
+
+            `;
+
+        } else {
+
+            round2Area.innerHTML = `
+
+                <p style="color:orange;">
+                    🔒 Waiting for Coordinator...
+                </p>
+
+                <button class="btn"
+                        disabled
+                        style="opacity:.6;cursor:not-allowed;">
+                    Locked
+                </button>
+
+            `;
+
+        }
+
+    });
+
+}
+
+setInterval(checkRound2,2000);
+
+checkRound2();
+
+</script>
 
 {% endblock %}

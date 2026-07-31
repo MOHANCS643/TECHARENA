@@ -430,8 +430,8 @@ nav a:hover{
     margin-bottom:35px;
 
     box-shadow:var(--shadow);
-
 }
+
 
 .dashboard-card h2{
 
@@ -750,7 +750,6 @@ nav{
     margin:35px 0;
 
 }
-
 /* =====================================
       QUESTION PALETTE
 ===================================== */
@@ -777,31 +776,39 @@ nav{
 
 }
 
+/* Horizontal Question Palette */
+
 .palette-grid{
 
-    display:grid;
+    display:flex;
 
-    grid-template-columns:repeat(5,60px);
+    flex-wrap:wrap;
 
-    gap:15px;
+    justify-content:center;
+
+    align-items:center;
+
+    gap:12px;
+
+    margin-top:20px;
 
 }
 
 .palette-btn{
 
-    width:55px;
+    width:50px;
 
-    height:55px;
+    height:50px;
 
     border:none;
 
-    border-radius:12px;
+    border-radius:10px;
 
     background:#E2E8F0;
 
     color:#111827;
 
-    font-weight:bold;
+    font-weight:700;
 
     cursor:pointer;
 
@@ -814,6 +821,38 @@ nav{
     background:var(--primary);
 
     color:white;
+
+    transform:scale(1.08);
+
+}
+
+/* Current Question */
+
+.current-question{
+
+    background:#2563EB !important;
+
+    color:white;
+
+}
+
+/* Answered Question */
+
+.answered-question{
+
+    background:#22C55E !important;
+
+    color:white;
+
+}
+
+/* Visited Question */
+
+.visited-question{
+
+    background:#FACC15 !important;
+
+    color:#111827;
 
 }
 
@@ -846,68 +885,6 @@ body.dark .timer-box{
     background:#2563EB;
 
 }
-.palette-grid{
-
-    display:grid;
-
-    grid-template-columns:repeat(5,60px);
-
-    gap:15px;
-
-    margin-top:20px;
-
-}
-
-.palette-btn{
-
-    width:55px;
-
-    height:55px;
-
-    border:none;
-
-    border-radius:10px;
-
-    background:#E2E8F0;
-
-    cursor:pointer;
-
-    font-weight:700;
-
-    transition:.25s;
-
-}
-
-.palette-btn:hover{
-
-    transform:scale(1.08);
-
-}
-
-.current-question{
-
-    background:#2563EB !important;
-
-    color:white;
-
-}
-
-.answered-question{
-
-    background:#22C55E !important;
-
-    color:white;
-
-}
-
-.visited-question{
-
-    background:#FACC15 !important;
-
-    color:#111827;
-
-}
-
 /* ======================================
         PREMIUM ADMIN DASHBOARD
 ======================================*/
@@ -1825,3 +1802,40 @@ transform:translateY(-8px);
     text-decoration:underline;
 
 }
+.instruction-list{
+    width:700px;
+    margin:20px auto;
+    text-align:left;
+    padding-left:30px;
+}
+
+.instruction-list li{
+    font-size:18px;
+    margin-bottom:12px;
+}
+
+.riddle-container{
+    text-align:center;
+    padding:40px;
+}
+
+.question-box{
+    margin:40px auto;
+    max-width:900px;
+    min-height:150px;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+}
+
+.question-box h1{
+    font-size:38px;
+    color:#2563eb;
+}
+
+.timer-box h1{
+    font-size:70px;
+    color:#ef4444;
+    margin-top:20px;
+}
+

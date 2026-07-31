@@ -382,22 +382,26 @@ function confirmSubmit(){
 
     let unanswered = questions.length - answered;
 
+    // Don't allow submit if questions are remaining
+    if(unanswered > 0){
+
+        alert(
+            "⚠ Please answer all questions before submitting.\n\n" +
+            "Answered : " + answered +
+            "\nRemaining : " + unanswered
+        );
+
+        return;
+    }
+
     let confirmBox = confirm(
-
-        "Submit Quiz?\n\n" +
-
+        "✅ You have answered all questions.\n\n" +
         "Answered Questions : " + answered +
-
-        "\nUnanswered Questions : " + unanswered +
-
-        "\n\nOnce submitted you cannot change your answers."
-
+        "\n\nAre you sure you want to submit?"
     );
 
     if(confirmBox){
-
         submitQuiz();
-
     }
 
 }

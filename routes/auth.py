@@ -5,6 +5,7 @@ from extensions import db
 import random
 import string
 from datetime import datetime
+from models.event_control import EventControl
 
 auth = Blueprint("auth", __name__)
 
@@ -95,12 +96,24 @@ def login():
 @login_required
 def dashboard():
 
+    event = EventControl.query.first()
+
     return render_template(
-        "dashboard.html",
-        team=current_user
+       "dashboard.html",
+        team=current_user,
+        event=event
     )
 
+@auth.route("/round2_status")
+@login_required
+def round2_status():
 
+    event = EventControl.query.first()
+
+    return {
+        "enabled": event.round2_enabled if event else False,
+        "completed": current_user.is_riddles_completed
+    }
 # -----------------------------
 # Logout
 # -----------------------------

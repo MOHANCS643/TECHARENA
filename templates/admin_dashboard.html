@@ -200,6 +200,18 @@
         🔄 Reset Quiz
     </button>
 
+    <button id="enableRound2" class="control-btn start-btn">
+    ▶ Enable Round 2
+</button>
+
+<button id="disableRound2" class="control-btn end-btn">
+    🔒 Disable Round 2
+</button>
+
+<button id="resetRound2" class="control-btn reset-btn">
+    🔄 Reset Round 2
+</button>
+
 </div>
 
 <div class="admin-footer">
@@ -354,6 +366,59 @@ document
 
 });
 
+// ---------------- Enable Round 2 ----------------
+
+document
+.getElementById("enableRound2")
+.addEventListener("click", function(){
+
+    fetch("/admin/enable_round2",{
+
+        method:"POST"
+
+    })
+
+    .then(r=>r.json())
+
+    .then(data=>{
+
+        if(data.success){
+
+            alert("Round 2 Enabled Successfully");
+
+        }
+
+    });
+
+});
+
+
+// ---------------- Disable Round 2 ----------------
+
+document
+.getElementById("disableRound2")
+.addEventListener("click", function(){
+
+    fetch("/admin/disable_round2",{
+
+        method:"POST"
+
+    })
+
+    .then(r=>r.json())
+
+    .then(data=>{
+
+        if(data.success){
+
+            alert("Round 2 Disabled");
+
+        }
+
+    });
+
+});
+
 // ===============================
 // LIVE DASHBOARD UPDATE
 // ===============================
@@ -477,6 +542,40 @@ if(data.online_teams.length === 0){
 setInterval(loadDashboard,2000);
 
 loadDashboard();
+
+// ---------------- Reset Round 2 ----------------
+
+document
+.getElementById("resetRound2")
+.addEventListener("click", function(){
+
+    if(!confirm("Reset Round 2 for all teams?")){
+        return;
+    }
+
+    fetch("/admin/reset_round2",{
+        method:"POST"
+    })
+
+    .then(r=>r.json())
+
+    .then(data=>{
+
+        if(data.success){
+
+            alert("Round 2 Reset Successfully");
+
+            location.reload();
+
+        }else{
+
+            alert(data.message);
+
+        }
+
+    });
+
+});
 
 </script>
 

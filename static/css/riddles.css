@@ -1,0 +1,204 @@
+/* =========================================
+   RIDDLES ROUND
+========================================= */
+
+.riddles-container{
+
+    max-width:1100px;
+
+    margin:40px auto;
+
+    padding:20px;
+}
+
+.riddles-header{
+
+    text-align:center;
+
+    margin-bottom:25px;
+}
+
+.riddles-header h1{
+
+    color:#2563eb;
+
+    font-size:40px;
+
+    margin-bottom:10px;
+}
+
+.riddles-header p{
+
+    color:#666;
+
+    font-size:20px;
+
+    font-weight:600;
+}
+
+.riddles-progress{
+
+    width:100%;
+
+    height:8px;
+
+    background:#dbeafe;
+
+    border-radius:10px;
+
+    overflow:hidden;
+
+    margin-bottom:30px;
+}
+
+#progress-fill{
+
+    width:0%;
+
+    height:100%;
+
+    background:#2563eb;
+
+    transition:.4s ease;
+}
+
+.riddles-question-card{
+
+    background:#fff;
+
+    border-radius:18px;
+
+    border-top:6px solid #2563eb;
+
+    min-height:220px;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    padding:40px;
+
+    box-shadow:0 12px 30px rgba(0,0,0,.08);
+
+    transition:
+        opacity .35s ease,
+        transform .35s ease,
+        box-shadow .35s ease;
+
+}
+.riddles-question-card h2{
+
+    text-align:center;
+
+    color:#1e40af;
+
+    font-size:40px;
+
+    line-height:1.5;
+}
+
+.riddles-timer{
+
+    text-align:center;
+
+    margin-top:40px;
+}
+
+.riddles-timer span{
+
+    font-size:72px;
+
+    font-weight:bold;
+
+    color:#2563eb;
+
+    transition:.25s;
+}
+
+.riddles-status{
+
+    text-align:center;
+
+    margin-top:20px;
+
+    color:#777;
+
+    font-size:17px;
+}
+.timer-warning{
+
+    animation:pulse 1s infinite;
+}
+
+.timer-danger{
+
+    animation:pulse .45s infinite;
+}
+
+@keyframes pulse{
+
+    0%{
+
+        transform:scale(1);
+
+    }
+
+    50%{
+
+        transform:scale(1.15);
+
+    }
+
+    100%{
+
+        transform:scale(1);
+
+    }
+
+}
+.riddles-question-card:hover{
+
+    box-shadow:0 18px 40px rgba(37,99,235,.18);
+
+}
+
+/* Disable Selection */
+
+body{
+
+    user-select:none;
+    -webkit-user-select:none;
+    -moz-user-select:none;
+    -ms-user-select:none;
+
+}
+
+.clue-box{
+
+    margin-top:30px;
+
+    padding:18px;
+
+    background:#fff7d6;
+
+    border-left:6px solid orange;
+
+    border-radius:10px;
+
+    width:650px;
+
+    margin-left:auto;
+    margin-right:auto;
+
+    font-size:22px;
+
+    font-weight:600;
+
+    color:#444;
+
+    display:none;
+
+    animation:fadeIn .5s;
+}

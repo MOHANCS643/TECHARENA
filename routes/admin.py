@@ -3,6 +3,7 @@ from models.team import Team
 from flask import jsonify
 from sqlalchemy import desc
 from models.quiz_control import QuizControl
+from models.event_control import EventControl
 from extensions import db
 from datetime import datetime
 admin = Blueprint(
@@ -311,4 +312,65 @@ def countdown():
 
         "paused": quiz.paused
 
+    })
+
+@admin.route("/enable_round2", methods=["POST"])
+def enable_round2():
+
+    if not session.get("admin"):
+        return jsonify({"success": False}), 401
+
+    event = EventControl.query.first()
+
+    if not event:
+        event = EventControl(id=1)
+        db.session.add(event)
+
+    event.round2_enabled = True
+    db.session.commit()
+
+    return jsonify({
+        "success": True,
+        "message": "Round 2 Enabled"
+    })
+
+
+@admin.route("/disable_round2", methods=["POST"])
+def disable_round2():
+
+    if not session.get("admin"):
+        return jsonify({"success": False}), 401
+
+    event = EventControl.query.first()
+
+    if event:
+        event.round2_enabled = False
+        db.session.commit()
+
+    return jsonify({
+        "success": True,
+        "message": "Round 2 Disabled"
+    })
+
+@admin.route("/reset_round2", methods=["POST"])
+def reset_round2():
+
+    if not session.get("admin"):
+        return jsonify({"success": False}), 401
+
+    # Lock Round 2
+    event = EventControl.query.first()
+
+    if event:
+        event.round2_enabled = False
+
+    # Reset every team
+    Team.query.update({
+        Team.is_riddles_completed: False
+    })
+
+    db.session.commit()
+
+    return jsonify({
+        "success": True
     })
