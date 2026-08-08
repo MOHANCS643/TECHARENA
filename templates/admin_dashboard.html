@@ -180,49 +180,117 @@
 
     </div>
 
+   <div class="leaderboard-card" style="margin-top:40px;">
+
+    <div class="leaderboard-title">
+        🖥 Live Coding Leaderboard
+    </div>
+
+    <table class="leaderboard-table">
+
+        <thead>
+            <tr>
+                <th>Rank</th>
+                <th>Team</th>
+                <th>College</th>
+                <th>Score</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+
+        <tbody id="codingLeaderboard">
+            <tr>
+                <td colspan="5">
+                    Waiting for Coding Submissions...
+                </td>
+            </tr>
+        </tbody>
+
+    </table>
+
+</div>
 
     <!-- Footer -->
-    <div class="admin-controls">
+  <!-- ===========================
+     ROUND 1 CONTROLS
+=========================== -->
 
-    <button id="startQuiz" class="control-btn start-btn">
+<h3 class="control-title">📘 Round 1 Controls</h3>
+
+<div class="admin-controls">
+
+    <button id="startQuiz" class="btn btn-success">
         ▶ Start Quiz
     </button>
 
-    <button id="pauseQuiz" class="control-btn pause-btn">
+    <button id="pauseQuiz" class="btn btn-warning">
         ⏸ Pause Quiz
     </button>
 
-    <button id="endQuiz" class="control-btn end-btn">
+    <button id="endQuiz" class="btn btn-danger">
         ■ End Quiz
     </button>
 
-    <button id="resetQuiz" class="control-btn reset-btn">
+    <button id="resetQuiz" class="btn btn-primary">
         🔄 Reset Quiz
     </button>
 
-    <button id="enableRound2" class="control-btn start-btn">
-    ▶ Enable Round 2
-</button>
-
-<button id="disableRound2" class="control-btn end-btn">
-    🔒 Disable Round 2
-</button>
-
-<button id="resetRound2" class="control-btn reset-btn">
-    🔄 Reset Round 2
-</button>
-
 </div>
 
-<div class="admin-footer">
 
-    <a href="/admin/logout" class="btn">
+<!-- ===========================
+     ROUND 2 CONTROLS
+=========================== -->
 
+<h3 class="control-title">🔐 Round 2 Controls</h3>
+
+<div class="admin-controls">
+
+    <button id="enableRound2" class="btn btn-success">
+        ▶ Enable Round 2
+    </button>
+
+    <button id="disableRound2" class="btn btn-danger">
+        🔒 Disable Round 2
+    </button>
+
+    <button id="resetRound2" class="btn btn-primary">
+        🔄 Reset Round 2
+    </button>
+
+</div>
+<!-- ===========================
+     ROUND 3 CONTROLS
+=========================== -->
+
+<!-- ===========================
+     ROUND 3 CONTROLS
+=========================== -->
+
+<h3 class="control-title">
+    💻 Round 3 Controls
+</h3>
+
+<div class="admin-controls">
+
+    <button id="enableRound3Btn" class="btn btn-success">
+        ▶ Enable Round 3
+    </button>
+
+    <button id="disableRound3Btn" class="btn btn-danger">
+        🔒 Disable Round 3
+    </button>
+
+    <button id="resetRound3Btn" class="btn btn-primary">
+        🔄 Reset Round 3
+    </button>
+
+</div>
+<div style="text-align:center;margin-top:30px;">
+
+    <a href="/logout" class="btn btn-primary">
         Logout
-
     </a>
-
-</div>
 
 </div>
 
@@ -577,6 +645,154 @@ document
 
 });
 
+
+function loadCodingLeaderboard(){
+
+    fetch("/coding/leaderboard")
+
+    .then(res => res.json())
+
+    .then(data => {
+
+        const tbody = document.getElementById("codingLeaderboard");
+
+        if(data.length === 0){
+
+            tbody.innerHTML = `
+            <tr>
+                <td colspan="5">
+                    Waiting for Coding Submissions...
+                </td>
+            </tr>
+            `;
+
+            return;
+        }
+
+        tbody.innerHTML = "";
+
+        data.forEach(row => {
+
+            let medal = row.rank;
+
+            if(row.rank == 1)
+                medal = "🥇";
+            else if(row.rank == 2)
+                medal = "🥈";
+            else if(row.rank == 3)
+                medal = "🥉";
+
+            tbody.innerHTML += `
+            <tr>
+
+                <td>${medal}</td>
+
+                <td>${row.team}</td>
+
+                <td>${row.college}</td>
+
+                <td>${row.score}</td>
+
+                <td style="color:limegreen;font-weight:bold;">
+                    ${row.status}
+                </td>
+
+            </tr>
+            `;
+
+        });
+
+    });
+
+}
+
+setInterval(loadCodingLeaderboard, 2000);
+loadCodingLeaderboard();
+
+
+// ---------------- Enable Round 3 ----------------
+
+document
+.getElementById("enableRound3Btn")
+.addEventListener("click", function(){
+
+    fetch("/admin/enable_round3",{
+        method:"POST"
+    })
+
+    .then(r=>r.json())
+
+    .then(data=>{
+
+        if(data.success){
+
+            alert("✅ Round 3 Enabled");
+
+        }
+
+    });
+
+});
+
+
+// ---------------- Disable Round 3 ----------------
+
+document
+.getElementById("disableRound3Btn")
+.addEventListener("click", function(){
+
+    fetch("/admin/disable_round3",{
+        method:"POST"
+    })
+
+    .then(r=>r.json())
+
+    .then(data=>{
+
+        if(data.success){
+
+            alert("🔒 Round 3 Disabled");
+
+        }
+
+    });
+
+});
+
+
+// ---------------- Reset Round 3 ----------------
+
+document
+.getElementById("resetRound3Btn")
+.addEventListener("click", function(){
+
+    if(!confirm("Reset Round 3 for all teams?")){
+        return;
+    }
+
+    fetch("/admin/reset_round3",{
+        method:"POST"
+    })
+
+    .then(r=>r.json())
+
+    .then(data=>{
+
+        if(data.success){
+
+            alert("✅ Round 3 Reset Successfully");
+
+            location.reload();
+
+        }else{
+
+            alert(data.message);
+
+        }
+
+    });
+
+});
 </script>
 
 {% endblock %}

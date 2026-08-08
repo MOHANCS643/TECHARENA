@@ -20,3 +20,4 @@ def instructions():
 @home.route("/leaderboard")
 def leaderboard():
     return render_template("leaderboard.html")
+

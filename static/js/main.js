@@ -18,3 +18,47 @@ toggle.onclick = () =>{
     }
 
 };
+
+// ==========================
+// ROUND 3 CONTROLS
+// ==========================
+
+const enableRound3Btn = document.getElementById("enableRound3Btn");
+
+if(enableRound3Btn){
+
+    enableRound3Btn.onclick = function(){
+
+        fetch("/admin/enable_round3",{
+
+            method:"POST"
+
+        }).then(()=>{
+
+            alert("✅ Round 3 Enabled");
+
+        });
+
+    };
+
+}
+
+const disableRound3Btn = document.getElementById("disableRound3Btn");
+
+if(disableRound3Btn){
+
+    disableRound3Btn.onclick=function(){
+
+        fetch("/admin/disable_round3",{
+
+            method:"POST"
+
+        }).then(()=>{
+
+            alert("🔒 Round 3 Disabled");
+
+        });
+
+    };
+
+}

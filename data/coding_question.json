@@ -1,0 +1,95 @@
+[
+  {
+    "id": 1,
+    "type": "python",
+    "title": "Sum of Two Numbers",
+    "description": "Read two integers and print their sum.",
+
+    "sample_input": "10 20",
+
+    "sample_output": "30",
+
+    "hidden_tests": [
+      {
+        "input":"5 7",
+        "output":"12"
+      }
+    ]
+  },
+
+  {
+    "id":2,
+
+    "type":"python",
+
+    "title":"Even or Odd",
+
+    "description":"Check whether number is even or odd.",
+
+    "sample_input":"8",
+
+    "sample_output":"Even",
+
+    "hidden_tests":[
+      {
+        "input":"5",
+        "output":"Odd"
+      }
+    ]
+  },
+
+  {
+    "id":3,
+
+    "type":"python",
+
+    "title":"Largest Number",
+
+    "description":"Print largest of three numbers.",
+
+    "sample_input":"4 9 2",
+
+    "sample_output":"9",
+
+    "hidden_tests":[
+      {
+        "input":"10 30 20",
+        "output":"30"
+      }
+    ]
+  },
+
+  {
+    "id":4,
+
+    "type":"python",
+
+    "title":"Factorial",
+
+    "description":"Find factorial of a number.",
+
+    "sample_input":"5",
+
+    "sample_output":"120",
+
+    "hidden_tests":[
+      {
+        "input":"6",
+        "output":"720"
+      }
+    ]
+  },
+
+  {
+    "id":5,
+
+    "type":"sql",
+
+    "title":"SQL Query",
+
+    "description":"Write an SQL query to display all employees whose salary is greater than 50000.",
+
+    "expected_query":"SELECT * FROM employee WHERE salary > 50000;"
+  }
+
+]

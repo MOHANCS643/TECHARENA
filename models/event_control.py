@@ -5,3 +5,4 @@ class EventControl(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     round2_enabled = db.Column(db.Boolean, default=False)
+    round3_enabled = db.Column(db.Boolean, default=False)

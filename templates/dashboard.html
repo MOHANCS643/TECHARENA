@@ -94,24 +94,41 @@
     </div>
 
 </div>
+<div class="dashboard-card">
 
-    <div class="dashboard-card">
+    <h2>Round 3 - The Final Compile</h2>
 
-        <h2>Round 3 - The Final Compile</h2>
+    <hr>
 
-        <hr>
+    <div id="round3Area">
 
         {% if team.is_coding_completed %}
 
-            <p style="color:limegreen;">
-                ✅ Coding Completed
-            </p>
+        <p style="color:limegreen;">
+            ✅ Coding Completed
+        </p>
+
+        {% elif event and event.round3_enabled %}
+def admin_stats
+        <p style="color:limegreen;">
+            🟢 Coding Challenge Started
+        </p>
+
+        <a href="{{ url_for('coding.coding_instructions') }}" class="btn">
+            Start Coding
+        </a>
 
         {% else %}
 
-            <p style="color:orange;">
-                Locked
-            </p>
+        <p style="color:orange;">
+            🔒 Waiting for Coordinator...
+        </p>
+
+        <button class="btn"
+                disabled
+                style="opacity:.6;cursor:not-allowed;">
+            Locked
+        </button>
 
         {% endif %}
 
@@ -119,11 +136,11 @@
 
     <br>
 
-    <a href="{{ url_for('auth.logout') }}" class="btn">
-
-        Logout
-
-    </a>
+    <div style="text-align:center;">
+        <a href="{{ url_for('auth.logout') }}" class="btn">
+            Logout
+        </a>
+    </div>
 
 </div>
 
@@ -183,6 +200,68 @@ function checkRound2(){
 setInterval(checkRound2,2000);
 
 checkRound2();
+
+</script>
+
+<script>
+
+function checkRound3(){
+
+    fetch("/round3_status")
+
+    .then(response => response.json())
+
+    .then(data => {
+
+        const round3Area = document.getElementById("round3Area");
+
+        if(round3Area.innerHTML.includes("Completed")){
+            return;
+        }
+
+        if(data.enabled){
+
+            round3Area.innerHTML = `
+
+                <p style="color:limegreen;">
+                    🟢 Coding Challenge Started
+                </p>
+
+                <a href="/coding/instructions" class="btn">
+                    Start Coding
+                </a>
+
+            `;
+
+        }
+
+        else{
+
+            round3Area.innerHTML = `
+
+                <p style="color:orange;">
+                    🔒 Waiting for Coordinator...
+                </p>
+
+                <button class="btn"
+                        disabled
+                        style="opacity:.6;cursor:not-allowed;">
+
+                    Locked
+
+                </button>
+
+            `;
+
+        }
+
+    });
+
+}
+
+setInterval(checkRound3,2000);
+
+checkRound3();
 
 </script>
 

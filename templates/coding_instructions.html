@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+
+{% block title %}Round 3 - The Final Compile{% endblock %}
+
+{% block content %}
+
+<div class="dashboard">
+
+    <div class="dashboard-card instructions-card">
+
+        <h2>Round 3 - The Final Compile</h2>
+
+        <hr>
+
+        <h3>Instructions</h3>
+
+        <br>
+
+        <ul class="instructions-list">
+
+            <li>Total Questions : <strong>5</strong></li>
+
+            <li>Total Time : <strong>30 Minutes</strong></li>
+
+            <li>Each question carries marks as displayed.</li>
+
+            <li>Programming languages available : <strong>Python, C, C++ and Java</strong></li>
+
+            <li>Read the question, sample input and sample output carefully.</li>
+
+            <li>Use the Code Editor to write and test your solution.</li>
+
+            <li>Use Custom Input to test your program with your own input.</li>
+
+            <li>Your code is preserved when switching between languages and questions.</li>
+
+            <li>Click <strong>Run Code</strong> to test your solution before submission.</li>
+
+            <li>Submit your solutions before the timer reaches zero.</li>
+
+            <li>When the 30-minute timer ends, the coding round is <strong>automatically submitted</strong>.</li>
+
+            <li>Once submitted, the coding round cannot be attempted again.</li>
+
+        </ul>
+
+        <br><br>
+
+        <center>
+
+            <a href="{{ url_for('coding.coding_page') }}" class="btn">
+                Start Round 3
+            </a>
+
+        </center>
+
+    </div>
+
+</div>
+
+{% endblock %}

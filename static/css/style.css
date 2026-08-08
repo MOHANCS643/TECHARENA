@@ -1042,7 +1042,7 @@ body.dark .timer-box{
 
 .leaderboard-card{
 
-    background:white;
+    background:rgb(248, 244, 244);
 
     border-radius:20px;
 
@@ -1839,3 +1839,136 @@ transform:translateY(-8px);
     margin-top:20px;
 }
 
+/* =====================================
+      ADMIN CONTROL HEADINGS
+===================================== */
+
+.control-title{
+
+    text-align:center;
+
+    color:#2563eb;
+
+    font-size:22px;
+
+    font-weight:700;
+
+    margin-top:30px;
+
+    margin-bottom:15px;
+
+}
+
+
+/* =====================================
+      ADMIN BUTTON GROUP
+===================================== */
+
+.admin-controls{
+
+    display:flex;
+
+    justify-content:center;
+
+    gap:20px;
+
+    flex-wrap:wrap;
+
+    margin-bottom:25px;
+
+}
+
+table tbody tr{
+    background:#ffffff !important;
+}
+
+table tbody td{
+    color:#222 !important;
+    font-weight:500;
+}
+
+table tbody tr:nth-child(even){
+    background:#f7f9fc !important;
+}
+
+.sympu-logo {
+    display: block;
+    width: 390px;
+    height: auto;
+    margin: -80px auto 5px auto;
+}
+
+.hero-section {
+    padding-top: 50px;
+    padding-bottom: 55px;
+}
+
+/* =====================================
+   HOME PAGE - SUBTLE VISUAL EFFECTS
+   Content/layout intentionally unchanged.
+===================================== */
+
+.hero{
+    background:linear-gradient(135deg, var(--hero) 0%, rgba(248,250,252,.96) 55%, rgba(239,246,255,.92) 100%);
+    background-size:180% 180%;
+    animation:heroGradient 12s ease-in-out infinite alternate;
+}
+
+body.dark .hero{
+    background:linear-gradient(135deg, #243045 0%, #1e293b 55%, #172554 100%);
+    background-size:180% 180%;
+}
+
+.sympu-logo{
+    animation:logoFloat 4s ease-in-out infinite;
+    filter:drop-shadow(0 0 0 rgba(37,99,235,0));
+    transition:filter .3s ease, transform .3s ease;
+}
+
+.hero:hover .sympu-logo{
+    filter:drop-shadow(0 0 10px rgba(37,99,235,.18));
+}
+
+.hero h1{
+    animation:welcomeFade .9s ease-out both;
+}
+
+.hero .buttons .btn{
+    transition:transform .22s ease, box-shadow .22s ease, background .22s ease;
+}
+
+.hero .buttons .btn:hover{
+    transform:translateY(-4px);
+    box-shadow:0 12px 24px rgba(37,99,235,.25);
+}
+
+.features .card{
+    transition:transform .25s ease, box-shadow .25s ease, border-color .25s ease;
+}
+
+.features .card:hover{
+    transform:translateY(-7px);
+    margin-bottom:0;
+    box-shadow:0 14px 28px rgba(15,23,42,.10);
+    border-color:rgba(37,99,235,.22);
+}
+
+@keyframes logoFloat{
+    0%,100%{transform:translateY(0)}
+    50%{transform:translateY(-5px)}
+}
+
+@keyframes welcomeFade{
+    from{opacity:0;transform:translateY(8px)}
+    to{opacity:1;transform:translateY(0)}
+}
+
+@keyframes heroGradient{
+    0%{background-position:0% 50%}
+    100%{background-position:100% 50%}
+}
+
+@media (prefers-reduced-motion:reduce){
+    .hero,.sympu-logo,.hero h1{animation:none}
+    .hero .buttons .btn,.features .card{transition:none}
+}

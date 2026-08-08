@@ -4,31 +4,47 @@
 
 {% block content %}
 
-<div class="container">
+<div class="dashboard">
 
-    <div class="card">
+    <div class="dashboard-card instructions-card">
 
         <h2>Round 2 - Logic ah Lock Pannu!</h2>
+
         <hr>
 
         <h3>Instructions</h3>
 
-        <ul class="instruction-list">
-            <li>Total Questions : 20</li>
-            <li>Time Per Question : 45 Seconds</li>
-            <li>Read each question carefully.</li>
-            <li>Write your answers on the answer sheet provided.</li>
-            <li>Questions will change automatically.</li>
-            <li>You cannot go back to previous questions.</li>
-            <li>Do not use mobile phones or other electronic devices.</li>
-            <li>Once started, the round cannot be paused.</li>
-        </ul>
-
         <br>
 
-        <a href="{{ url_for('riddles.start') }}" class="btn">
-            Start Round 2
-        </a>
+        <ul class="instructions-list">
+
+            <li>Total Questions : <strong>20</strong></li>
+
+            <li>Time Per Question : <strong>45 Seconds</strong></li>
+
+            <li>Read each question carefully.</li>
+
+            <li>Write your answers on the answer sheet provided.</li>
+
+            <li>Questions will change automatically.</li>
+
+            <li>You cannot go back to previous questions.</li>
+
+            <li>Do not use mobile phones or other electronic devices.</li>
+
+            <li>Once started, the round cannot be paused.</li>
+
+        </ul>
+
+        <br><br>
+
+        <center>
+
+            <a href="{{ url_for('riddles.start') }}" class="btn">
+                Start Round 2
+            </a>
+
+        </center>
 
     </div>
 

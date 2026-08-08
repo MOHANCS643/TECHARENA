@@ -6,6 +6,7 @@ from models.quiz_control import QuizControl
 from models.event_control import EventControl
 from extensions import db
 from datetime import datetime
+from models.coding_submission import CodingSubmission
 admin = Blueprint(
     "admin",
     __name__,
@@ -68,37 +69,30 @@ def stats():
     if not session.get("admin"):
         return jsonify({"error": "Unauthorized"}), 401
 
+    # ==========================
+    # Quiz Leaderboard
+    # ==========================
     teams = Team.query.filter_by(
-       is_quiz_completed=True
+        is_quiz_completed=True
     ).order_by(
-       Team.score.desc(),
-       Team.percentage.desc(),
-       Team.submitted_at.asc()
+        Team.score.desc(),
+        Team.percentage.desc(),
+        Team.submitted_at.asc()
     ).all()
+
     total_teams = Team.query.count()
 
     submitted = Team.query.filter_by(
         is_quiz_completed=True
     ).count()
 
-    online = Team.query.filter_by(is_online=True).count()
-
-    online_teams = []
-
-    for team in Team.query.filter_by(is_online=True).all():
-
-       online_teams.append({
-    "team_name": team.team_name,
-    "college": team.college_name,
-    "login_time": team.login_time.strftime("%I:%M %p") if team.login_time else "-"
-})
+    online = Team.query.filter_by(
+        is_online=True
+    ).count()
 
     running = total_teams - submitted
 
-    highest = 0
-
-    if teams:
-        highest = teams[0].score
+    highest = teams[0].score if teams else 0
 
     leaderboard = []
 
@@ -122,15 +116,58 @@ def stats():
 
         rank += 1
 
+    # ==========================
+    # Online Teams
+    # ==========================
     online_teams = []
 
     for team in Team.query.filter_by(is_online=True).all():
 
-     online_teams.append({
-    "team_name": team.team_name,
-    "college": team.college_name,
-    "login_time": team.login_time.strftime("%I:%M %p") if team.login_time else "-"
-})
+        online_teams.append({
+
+            "team_name": team.team_name,
+
+            "college": team.college_name,
+
+            "login_time": team.login_time.strftime("%I:%M %p") if team.login_time else "-"
+
+        })
+
+    # ==========================
+    # Coding Leaderboard
+    # ==========================
+    coding_submissions = (
+        db.session.query(CodingSubmission, Team)
+        .join(Team, CodingSubmission.team_id == Team.id)
+        .filter(CodingSubmission.submitted == True)
+        .order_by(
+            CodingSubmission.score.desc(),
+            CodingSubmission.submitted_at.asc()
+        )
+        .all()
+    )
+
+    coding_leaderboard = []
+
+    rank = 1
+
+    for submission, team in coding_submissions:
+
+        coding_leaderboard.append({
+
+            "rank": rank,
+
+            "team": team.team_name,
+
+            "college": team.college_name,
+
+            "score": submission.score,
+
+            "status": submission.status
+
+        })
+
+        rank += 1
 
     return jsonify({
 
@@ -146,7 +183,9 @@ def stats():
 
         "highest": highest,
 
-        "leaderboard": leaderboard
+        "leaderboard": leaderboard,
+
+        "coding_leaderboard": coding_leaderboard
 
     })
 
@@ -373,4 +412,83 @@ def reset_round2():
 
     return jsonify({
         "success": True
+    })
+
+@admin.route("/enable_round3", methods=["POST"])
+def enable_round3():
+
+    control = EventControl.query.first()
+
+    if not control:
+        control = EventControl()
+        db.session.add(control)
+
+    control.round3_enabled = True
+
+    db.session.commit()
+
+    return jsonify(success=True)
+
+@admin.route("/disable_round3", methods=["POST"])
+def disable_round3():
+
+    control = EventControl.query.first()
+
+    if control:
+        control.round3_enabled = False
+        db.session.commit()
+
+    return jsonify(success=True)
+
+@admin.route("/reset_round3", methods=["POST"])
+def reset_round3():
+
+    if not session.get("admin"):
+        return jsonify({"success": False}), 401
+
+    # Disable Round 3
+    control = EventControl.query.first()
+
+    if control:
+        control.round3_enabled = False
+
+    # Reset every team
+    Team.query.update({
+        Team.is_coding_completed: False
+    })
+
+    # Reset every coding submission
+    CodingSubmission.query.update({
+
+        CodingSubmission.language: "Python",
+
+        CodingSubmission.code_q1: "",
+
+        CodingSubmission.code_q2: "",
+
+        CodingSubmission.code_q3: "",
+
+        CodingSubmission.code_q4: "",
+
+        CodingSubmission.code_q5: "",
+
+        CodingSubmission.submitted: False,
+
+        CodingSubmission.passed: 0,
+
+        CodingSubmission.total: 0,
+
+        CodingSubmission.score: 0,
+
+        CodingSubmission.status: "Pending",
+
+        CodingSubmission.submitted_at: None
+
+    })
+
+    db.session.commit()
+
+    return jsonify({
+        "success": True,
+        "message": "Round 3 Reset Successfully"
     })

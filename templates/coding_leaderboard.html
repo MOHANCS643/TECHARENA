@@ -1,0 +1,137 @@
+{% extends "base.html" %}
+
+{% block title %}Coding Leaderboard{% endblock %}
+
+{% block content %}
+
+<div class="section-title">
+
+    <h2>🏆 Live Coding Leaderboard</h2>
+
+    <hr>
+
+    <table class="leaderboard-table">
+
+        <thead>
+
+            <tr>
+
+                <th>Rank</th>
+
+                <th>Team Name</th>
+
+                <th>College</th>
+
+                <th>Score</th>
+
+                <th>Status</th>
+
+                <th>Time</th>
+
+            </tr>
+
+        </thead>
+
+       <tbody id="codingLeaderboard">
+
+    <tr class="waiting-row">
+
+        <td colspan="6">
+
+            Waiting for Coding Submissions...
+
+        </td>
+
+    </tr>
+
+</tbody>
+
+    </table>
+
+</div>
+
+<script>
+
+function loadCodingLeaderboard(){
+
+    fetch("/coding/leaderboard")
+
+    .then(res => res.json())
+
+    .then(data => {
+
+        const tbody = document.getElementById("codingLeaderboard");
+
+        if(data.length === 0){
+
+            tbody.innerHTML = `
+<tr class="waiting-row">
+    <td colspan="6">
+        Waiting for Coding Submissions...
+    </td>
+</tr>
+`;
+
+            return;
+        }
+
+        tbody.innerHTML = "";
+
+        data.forEach(row => {
+
+    let medal = row.rank;
+
+    if(row.rank == 1)
+        medal = "🥇";
+    else if(row.rank == 2)
+        medal = "🥈";
+    else if(row.rank == 3)
+        medal = "🥉";
+
+    let rowClass = "";
+
+    if(row.rank == 1)
+        rowClass = "gold";
+    else if(row.rank == 2)
+        rowClass = "silver";
+    else if(row.rank == 3)
+        rowClass = "bronze";
+
+    let statusColor =
+        row.status === "Accepted"
+            ? "limegreen"
+            : "orangered";
+
+    tbody.innerHTML += `
+        <tr class="${rowClass}">
+
+            <td>${medal}</td>
+
+            <td>${row.team}</td>
+
+            <td>${row.college}</td>
+
+            <td><b>${row.score}</b></td>
+
+            <td style="color:${statusColor};font-weight:bold;">
+                ${row.status}
+            </td>
+
+            <td>${row.time}</td>
+
+        </tr>
+    `;
+
+});
+
+    });
+
+}
+
+loadCodingLeaderboard();
+
+setInterval(loadCodingLeaderboard,2000);
+
+</script>
+
+{% endblock %}
